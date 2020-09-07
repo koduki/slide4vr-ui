@@ -9,8 +9,6 @@ steps:
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_DOMAIN|(read x; echo VUE_APP_AUTH_API_DOMAIN=$x  ) >> .env.production &&
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_KEY|(read x;    echo VUE_APP_AUTH_API_KEY=$x     ) >> .env.production
     " ]
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['cp', '.env.production', 'gs://slide4vr.nklab.dev']
 - name: node
   entrypoint: yarn
   args: ['run', 'prod-build']
