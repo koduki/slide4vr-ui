@@ -9,6 +9,7 @@ export default {
   mutations: {
     store(state, user) {
       state.id = user.id;
+      console.log(state.id);
       state.token = user.token;
       state.name = user.name;
       state.pic = user.pic;

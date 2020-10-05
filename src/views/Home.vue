@@ -106,14 +106,14 @@ export default {
   },
   created: function () {
     this.isLoading = true;
-    this.fetchSlide();
-    this.timer = setInterval(this.fetchSlide, 10 * 1000);
+    this.fetchSlides();
+    this.timer = setInterval(this.fetchSlides, 10 * 1000);
   },
   beforeDestroy() {
     clearInterval(this.timer);
   },
   methods: {
-    fetchSlide() {
+    fetchSlides() {
       const uri = process.env.VUE_APP_API_BASE_URL + "/slide";
 
       const config = {
@@ -140,7 +140,7 @@ export default {
         },
       };
       this.axios.delete(uri, config).then((response) => {
-        this.fetchSlide();
+        this.fetchSlides();
       });
     },
     onCancel: function () {

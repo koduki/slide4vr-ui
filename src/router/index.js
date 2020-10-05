@@ -3,6 +3,7 @@ import VueRouter from "vue-router";
 import Login from "@/views/Login.vue";
 import Home from "@/views/Home.vue";
 import Create from "@/views/Create.vue";
+import Show from "@/views/Show.vue";
 
 // store
 import Store from "@/store";
@@ -20,6 +21,12 @@ const routes = [
     name: "Home",
     component: Home,
     meta: { requiresAuth: true },
+  },
+  {
+    path: "/slide/:key",
+    name: "Show",
+    component: Show,
+    meta: { requiresAuth: false },
   },
   {
     path: "/create",
