@@ -18,6 +18,9 @@
       <div class="container">
         <b-tabs content-class="mt-3">
           <b-tab title="Slide" active>
+            <div v-if="isLoading==false">
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Now Loading
+            </div>
             <b-carousel
               id="slideShow"
               v-model="slide"
@@ -67,15 +70,17 @@ export default {
   },
   created: function () {
     this.isLoading = true;
-
     this.loadSlide(this.$route.params.userid, this.$route.params.key);
+    this.isLoading = false;
   },
   methods: {
     onCancel: function () {
       console.log("User cancelled the loader.");
     },
     onTabVcas: function(){
+      this.isLoading = true;
       this.loadSlide4Vcas(this.$route.params.userid, this.$route.params.key);
+      this.isLoading = false;
     },
     onTweet: function(){
         var shareURL = 'https://twitter.com/intent/tweet?text=' + "Slide4VR: " + this.slideItem.title + "+%23slide4vr" + '&url=' + location.href;

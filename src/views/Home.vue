@@ -23,7 +23,7 @@
             </a>
             </span>
             <span v-else>
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             </span>
             <span  v-if="item.is_uploaded==true">
               <a :href='"/slide/" + $store.state.user.id + "/" + item.key' style="text-decoration: none; cursor: pointer;color: #007DBA;">
