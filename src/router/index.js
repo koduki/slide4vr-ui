@@ -23,7 +23,7 @@ const routes = [
     meta: { requiresAuth: true },
   },
   {
-    path: "/slide/:key",
+    path: "/slide/:userid/:key",
     name: "Show",
     component: Show,
     meta: { requiresAuth: false },
