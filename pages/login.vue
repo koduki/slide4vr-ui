@@ -14,7 +14,10 @@
               data-aos-delay="100"
             />
           </div>
-          <div class="col-12 col-md-8 col-lg-7 order-md-1 aos-init aos-animate" data-aos="fade-up">
+          <div
+            class="col-12 col-md-8 col-lg-7 order-md-1 aos-init aos-animate"
+            data-aos="fade-up"
+          >
             <!-- Heading -->
             <h1 class="display-4 text-center text-md-left">
               バーチャルキャストで
@@ -26,12 +29,12 @@
             <div class="lead text-center text-md-left text-muted mb-6 mb-lg-8">
               <p>
                 VRの世界でプレゼンをしてみたいと思いませんか？
-                <a
-                  href="https://virtualcast.jp/"
-                  target="_blank"
-                >VirtualCast</a>を使えば好きなアバターでスライドを使って本当に発表をしているかのように配信をすることが出来ます。
+                <a href="https://virtualcast.jp/" target="_blank">VirtualCast</a
+                >を使えば好きなアバターでスライドを使って本当に発表をしているかのように配信をすることが出来ます。
               </p>
-              <p>「やってみたいけど準備が大変そう。。。」Slide4VRはそんなあなたを支援します。</p>
+              <p>
+                「やってみたいけど準備が大変そう。。。」Slide4VRはそんなあなたを支援します。
+              </p>
             </div>
           </div>
         </div>
@@ -50,7 +53,10 @@
               <h2>SNS認証でログインする</h2>
 
               <button type="button" class="btn" @click="signInWithGoogle">
-                <img src="/btn_google_signin_dark_normal_web@2x.png" alt="Googleでログイン" />
+                <img
+                  src="/btn_google_signin_dark_normal_web@2x.png"
+                  alt="Googleでログイン"
+                />
               </button>
               <button type="button" class="btn" @click="signInWithTwitter">
                 <img src="/Twitter.png" alt="Twitterでログイン" />
@@ -83,11 +89,16 @@
               <a
                 href="https://virtualcast.jp/wiki/doku.php?id=virtualcast:item:whiteboard"
                 target="_blank"
-              >ホワイトボード</a>」はインターネット上の「誰でもアクセスできる状態」場所に置いた画像を表示する事が出来ます。
+                >ホワイトボード</a
+              >」はインターネット上の「誰でもアクセスできる状態」場所に置いた画像を表示する事が出来ます。
               <br />Slide4VRではアップロードしたPDFまたはPPTXファイルを自動で画像に変換してWebからアクセス出来る場所に配置します。自分でサーバを用意する必要はありません。
             </p>
           </div>
-          <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="50">
+          <div
+            class="col-12 col-md-4 aos-init aos-animate"
+            data-aos="fade-up"
+            data-aos-delay="50"
+          >
             <!-- Icon -->
             <div class="icon text-primary mb-3">
               <img src="whiteboard.svg" height="24" />
@@ -102,10 +113,15 @@
               <a
                 href="https://virtualcast.jp/wiki/doku.php?id=virtualcast:config#whiteboard"
                 target="_blank"
-              >config.json形式</a>に変換して表示します。設定ファイルにコピペするだけでOKなので面倒な作業を大幅に短縮できます。
+                >config.json形式</a
+              >に変換して表示します。設定ファイルにコピペするだけでOKなので面倒な作業を大幅に短縮できます。
             </p>
           </div>
-          <div class="col-12 col-md-4 aos-init aos-animate" data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="col-12 col-md-4 aos-init aos-animate"
+            data-aos="fade-up"
+            data-aos-delay="100"
+          >
             <!-- Icon -->
             <div class="icon text-primary mb-3">
               <img src="/btn_google_light_normal_ios.svg" width="24px" />
@@ -116,9 +132,9 @@
             <h3>いつものSNSアカウントでログインできる</h3>
 
             <!-- Text -->
-            <p
-              class="text-muted mb-0"
-            >Slide4VRではセキュリティと利便性の観点から独自の認証機能は持たずにSNS認証のみをサポートします。既にもっているGoogleやTwitterと言ったアカウントを使って手間いらずかつ安心してご利用いただけます。</p>
+            <p class="text-muted mb-0">
+              Slide4VRではセキュリティと利便性の観点から独自の認証機能は持たずにSNS認証のみをサポートします。既にもっているGoogleやTwitterと言ったアカウントを使って手間いらずかつ安心してご利用いただけます。
+            </p>
           </div>
         </div>
         <!-- / .row -->
@@ -149,22 +165,26 @@ footer {
 }
 </style>
 
-<script>
-import Auth from "@/modules/auth";
-export default {
-  name: "Login",
+<script lang="ts">
+import Vue from "vue";
+
+import { Auth, Provider } from "@/services/auth";
+export default Vue.extend({
   data() {
     return {};
   },
+  async asyncData() {},
   methods: {
-    signInWithGoogle: function () {
-      const self = this;
-      Auth.loginWithGoogle(() => self.$router.push("home"));
+    async signInWithGoogle() {
+      const auth = new Auth(this.$accessor, this.$config.firebase);
+      await auth.login(Provider.Google);
+      this.$router.push("/");
     },
-    signInWithTwitter: function () {
-      const self = this;
-      Auth.loginWithTwitter(() => self.$router.push("home"));
+    async signInWithTwitter() {
+      const auth = new Auth(this.$accessor, this.$config.firebase);
+      await auth.login(Provider.Twitter);
+      this.$router.push("/");
     },
   },
-};
+});
 </script>
