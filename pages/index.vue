@@ -104,6 +104,7 @@ export default Vue.extend({
     async fetchSlides() {
       const url = `${this.$config.apiBaseUrl}/slide`;
       this.slides = (await axios.get(url, this.config())).data;
+      this.$nuxt.$loading.finish();
       this.slides.sort((a: any, b: any) =>
         a.created_at < b.created_at ? 1 : -1
       );
@@ -127,6 +128,7 @@ export default Vue.extend({
       console.log(key);
 
       const url = `${this.$config.apiBaseUrl}/slide/${key}`;
+      this.$nuxt.$loading.start();
       await axios.delete(url, this.config());
       this.fetchSlides();
     },

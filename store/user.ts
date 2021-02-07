@@ -1,4 +1,4 @@
-import { mutationTree } from 'typed-vuex'
+import { mutationTree, getterTree } from 'typed-vuex'
 
 export type RootState = ReturnType<typeof state>
 export type UserState = {
@@ -22,6 +22,7 @@ export const mutations = mutationTree(state, {
         state.name = user.name;
         state.token = user.token;
         state.pic = user.pic;
+        state.timestamp = new Date().getTime();
     },
     drop(state) {
         state.id = state.token = state.name = state.pic = "";

@@ -19,7 +19,7 @@
                 accept=".pptx, .pdf"
                 class="custom-file-input"
                 id="inputFile"
-                @change="onDrop"
+                @change="onChange"
               />
               <label class="custom-file-label" for="inputFile">{{
                 filepath
@@ -45,7 +45,7 @@ export default Vue.extend({
     return {
       item: {
         title: "",
-        files: [],
+        file: { name: "" },
       },
       filepath: "ここにスライドをアップロード",
       message: "",
@@ -59,19 +59,15 @@ export default Vue.extend({
         },
       };
     },
-    //     async fetchSlides() {
-    //   const url = `${this.$config.apiBaseUrl}/slide`;
-    //   const response = await axios.post(url, data, this.config());
-    //   this.slides = response.data;
-    // },
 
     async postSlide() {
       const url = `${this.$config.apiBaseUrl}/slide`;
       const data = new FormData();
 
       data.append("title", this.item.title);
-      data.append("slide", this.item.files[0]);
+      data.append("slide", (this.item.file as unknown) as Blob);
 
+      this.$nuxt.$loading.start();
       axios
         .post(url, data, this.config())
         .then(() => {
@@ -79,15 +75,19 @@ export default Vue.extend({
             icon: "success",
             text: "Upload Success!",
           });
+          this.$nuxt.$loading.finish();
           this.$router.push("/");
         })
         .catch((error) => {
           this.message = `status: ${error.response.status}, message: ${error.response.data}`;
         });
     },
-    onDrop: function (event: any) {
-      this.item.files = event.target.files;
-      //   this.filepath = this.item.files[0].name;
+    onChange: function (event: { target: HTMLInputElement }) {
+      const files = event.target.files;
+      if (event.target.files != null) {
+        this.item.file = event.target.files.item(0) as { name: "" };
+      }
+      this.filepath = this.item.file.name;
     },
   },
 });

@@ -3,7 +3,6 @@
     <div class="card">
       <div class="card-header">
         <h2>{{ slideItem.title }}</h2>
-        {{ $accessor.user.pic }}
         <div class="twitter_share">
           <button @click="onTweet" class="btn">
             <img src="/Twitter_Social_Icon_Circle_Color.svg" width="32px" />
@@ -59,12 +58,39 @@ export default Vue.extend({
   },
   head(): MetaInfo {
     return {
-      title: "Slide4VR: " + this.slideItem.title,
+      title: this.slideItem.title,
       meta: [
         {
           hid: "description",
           name: "description",
-          content: "about ",
+          content: this.slideItem.title + " に関してのスライド資料",
+        },
+        {
+          hid: "twitter:card",
+          property: "twitter:card",
+          content: "summary_large_image",
+        },
+        { hid: "og:type", property: "og:type", content: "article" },
+        {
+          hid: "og:title",
+          property: "og:title",
+          content: this.slideItem.title,
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content: this.slideItem.title + " に関してのスライド資料",
+        },
+        { hid: "og:site_name", property: "og:site_name", content: "Slide4VR" },
+        {
+          hid: "og:image",
+          property: "og:image",
+          content: "https://slide4vr.nklab.dev/slide4vr_og.png",
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: "https://slide4vr.nklab.dev/slide/${params.user}/${params.id}",
         },
       ],
     };
