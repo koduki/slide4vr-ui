@@ -34,7 +34,7 @@ export default {
   // Generate Dynamic Routing
   generate: {
     // exclude: ['/', '/create'],
-    routes: ['/slide/0m3ItnvCMQhbACV9rR5mkdmFOns2/4a166bec-66ac-4aa0-affd-5a1a4947b23c']
+    routes: ['/slide/0m3ItnvCMQhbACV9rR5mkdmFOns2/595c7e9f-4370-43f5-9365-e931bdf4549d']
   },
 
   // Loading: https://nuxtjs.org/docs/2.x/features/loading

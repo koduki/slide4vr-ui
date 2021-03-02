@@ -30,7 +30,7 @@
             </span>
             <span v-if="item.is_uploaded == true">
               <a
-                :href="'/slide/' + $accessor.user.id + '/' + item.key"
+                :href="'/slide/' + $accessor.user.id + '/' + item.key + '/'"
                 style="text-decoration: none; cursor: pointer; color: #007dba"
               >
                 <h6>{{ item.title }}</h6>

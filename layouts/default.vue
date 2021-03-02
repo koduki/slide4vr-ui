@@ -18,10 +18,14 @@
                 </b-button>
 
                 <b-modal id="bv-modal-profile" size="lm" hide-footer @show="showProfile()">
-                    <template v-slot:modal-title>Profile</template>
-                    <p>Application Token: <span>{{appToken}}</span>
-                        <b-button class="sm-1 btn-danger" @click="resetAppToken()">Reset</b-button>
+                    <template v-slot:modal-title>プロフィール</template>
+                    <div>
+                    <p>
+                        <span>APIトークン: </span><span>{{appToken}}</span>
+                        <b-button class="sm-1 btn-danger" @click="resetAppToken()">再作成</b-button>
                     </p>
+                    <p>※ VCJEと連携させる場合はAPIトークンを利用してください</p>
+                    </div>
                     <b-button class="mt-3" block @click="logout()">Logout</b-button>
                 </b-modal>
             </div>
