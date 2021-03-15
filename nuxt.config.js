@@ -1,3 +1,6 @@
+const fs = require('fs')
+const ssgPage = JSON.parse(fs.readFileSync('ssg/ssg-pages.json'))
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -34,7 +37,8 @@ export default {
   // Generate Dynamic Routing
   generate: {
     // exclude: ['/', '/create'],
-    routes: ['/slide/0m3ItnvCMQhbACV9rR5mkdmFOns2/595c7e9f-4370-43f5-9365-e931bdf4549d']
+    routes: ssgPage["urls"]
+    
   },
 
   // Loading: https://nuxtjs.org/docs/2.x/features/loading
