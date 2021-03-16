@@ -85,12 +85,12 @@ export default Vue.extend({
         {
           hid: "og:image",
           property: "og:image",
-          content: "https://slide4vr.nklab.dev/slide4vr_og.png",
+          content: "https://storage.googleapis.com/slide2vr-slides/"+ this.$route.params.user + "/" + this.$route.params.id + "/image-1.png",
         },
         {
           hid: "og:url",
           property: "og:url",
-          content: "https://slide4vr.nklab.dev/slide/${params.user}/${params.id}",
+          content: "https://slide4vr.nklab.dev/slide/" + this.$route.params.user + "/" + this.$route.params.id 
         },
       ],
     };
