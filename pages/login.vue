@@ -167,6 +167,7 @@ footer {
 
 <script lang="ts">
 import Vue from "vue";
+import axios from "axios";
 
 import { Auth, Provider } from "@/services/auth";
 export default Vue.extend({
@@ -174,6 +175,10 @@ export default Vue.extend({
     return {};
   },
   async asyncData() {},
+  async mounted(){
+      const url = "https://slide4vr-healthcheck-dnb6froqha-uc.a.run.app/healthcheck";
+      console.log("healthcheck: " + (await axios.get(url)).data);
+  },
   methods: {
     async signInWithGoogle() {
       const auth = new Auth(this.$accessor, this.$config.firebase);
