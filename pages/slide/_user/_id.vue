@@ -85,7 +85,7 @@ export default Vue.extend({
         {
           hid: "og:image",
           property: "og:image",
-          content: "https://storage.googleapis.com/slide2vr-slides/"+ this.$route.params.user + "/" + this.$route.params.id + "/image-1.png",
+          content: "https://storage.googleapis.com/slide2vr-slides/"+ this.$route.params.user + "/" + this.$route.params.id + "/image-01.png",
         },
         {
           hid: "og:url",
