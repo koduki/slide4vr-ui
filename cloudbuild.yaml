@@ -1,18 +1,19 @@
 steps:
-- name: node
+# Deploy for CDN
+- name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
   args: ['install']
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['-c', "
-    gcloud secrets versions access latest --secret=VUE_APP_API_BASE_URL|(read x;    echo VUE_APP_API_BASE_URL=$x     ) > .env.production && 
-    gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_DOMAIN|(read x; echo VUE_APP_AUTH_API_DOMAIN=$x  ) >> .env.production &&
-    gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_KEY|(read x;    echo VUE_APP_AUTH_API_KEY=$x     ) >> .env.production
+    echo API_BASE_URL=https://slide4vr-api-dnb6froqha-uc.a.run.app > .env && 
+    gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_DOMAIN|(read x; echo FIREBAE_AUTH_DOMAIN=$x  ) >> .env &&
+    gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_KEY|(read x;    echo FIREBAE_AUTH_API_KEY=$x     ) >> .env
     " ]
-- name: node
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: gsutil
+  args: ['cp', 'gs://stg-slide4vr.nklab.dev/ssg-pages.json', 'ssg/ssg-pages.json']  
+- name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
-  args: ['run', 'prod-build']
-  #- name: 'gcr.io/cloud-builders/gsutil'
-  #  args: ['rm', "gs://slide4vr.nklab.dev/**"]
-- name: 'gcr.io/cloud-builders/gsutil'
-  args: ['-m', 'cp', '-R', './dist/*', 'gs://slide4vr.nklab.dev']
+  args: ['generate']
+- name: 'gcr.io/slide2vr/slide4vr_ui-builder'
