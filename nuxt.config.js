@@ -34,11 +34,25 @@ export default {
   css: [
   ],
 
+  router: {
+    extendRoutes(routes) {
+        routes.forEach((route) => {
+        // When options.generate.subFolders is true (default)
+        const alias =
+            route.path.length > 1 ? `${route.path}/index.html` : '/index.html'
+        // When options.generate.subFolders is false
+        // const normalizedRoute = route.path.replace(/\/$/, '') // Remove trailing slashes if they exist
+        // const alias =
+        //   route.path.length > 1 ? `${normalizedRoute}.html` : '/index.html'
+        route.alias = alias
+        })
+    }
+  },
+
   // Generate Dynamic Routing
   generate: {
     // exclude: ['/', '/create'],
-    routes: ssgPage["urls"]
-    
+    routes: ssgPage["urls"]   
   },
 
   // Loading: https://nuxtjs.org/docs/2.x/features/loading
