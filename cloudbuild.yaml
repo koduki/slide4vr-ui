@@ -1,8 +1,32 @@
 steps:
-# Deploy for CDN
+# Deploy to Builder
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr_ui-builder', './']
+  tags: ['ui', 'builder']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/slide4vr_ui-builder']
+  id: 'slide4vr_ui-builder'
+  tags: ['ui', 'builder']
+images:
+- gcr.io/$PROJECT_ID/slide4vr_ui-builder
+# Deploy to SSG
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '-f', 'ssg/Dockerfile', '.']
+  tags: ['ui', 'ssg']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/slide4vr-ssg']
+  tags: ['ui', 'ssg']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['run', 'deploy', 'slide4vr-ssg', '--image', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
+  tags: ['ui', 'ssg']
+images:
+- gcr.io/$PROJECT_ID/slide4vr-ssg
+# Deploy to CDN
 - name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
   args: ['install']
+  tags: ['ui', 'web']
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['-c', "
@@ -10,10 +34,15 @@ steps:
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_DOMAIN|(read x; echo FIREBAE_AUTH_DOMAIN=$x  ) >> .env &&
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_KEY|(read x;    echo FIREBAE_AUTH_API_KEY=$x     ) >> .env
     " ]
+  tags: ['ui', 'web']
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: gsutil
-  args: ['cp', 'gs://stg-slide4vr.nklab.dev/ssg-pages.json', 'ssg/ssg-pages.json']  
+  args: ['cp', 'gs://stg-slide4vr.nklab.dev/ssg-pages.json', 'ssg/ssg-pages.json'] 
+  tags: ['ui', 'web']
 - name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
   args: ['generate']
+  tags: ['ui', 'web']
 - name: 'gcr.io/slide2vr/slide4vr_ui-builder'
+  waitFor: ['slide4vr_ui-builder']
+  tags: ['ui', 'web']
