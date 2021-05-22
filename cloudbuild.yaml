@@ -4,7 +4,7 @@ images:
 steps:
 # Deploy to Builder
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr_ui-builder', './']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr_ui-builder','-f' ,'builder/Dockerfile', '.']
   id: 'slide4vr_ui-builder'
 # Deploy to SSG
 - name: 'gcr.io/cloud-builders/docker'
