@@ -5,18 +5,26 @@ steps:
 # Deploy to Builder
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr_ui-builder','-f' ,'builder/Dockerfile', '.']
-  id: 'slide4vr_ui-builder'
+  id: 'slide4vr_ui:builder:build'
 # Deploy to SSG
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '-f', 'ssg/Dockerfile', '.']
+  entrypoint: 'bash'
+  args: ['-c', 'docker pull gcr.io/$PROJECT_ID/slide4vr-ssg:latest || exit 0']
+  id: 'slide4vr_ui:ssg:preparation'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '--cache-from', 'gcr.io/$PROJECT_ID/slide4vr-ssg:latest', '-f', 'ssg/Dockerfile', '.']
+  id: 'slide4vr_ui:ssg:build'
 - name: 'gcr.io/cloud-builders/docker'
   args: ['push', 'gcr.io/$PROJECT_ID/slide4vr-ssg']
+  id: 'slide4vr_ui:ssg:push'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'deploy', 'slide4vr-ssg', '--image', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
+  id: 'slide4vr_ui:ssg:run'
 # Deploy to CDN
 - name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
   args: ['install']
+  id: 'slide4vr_ui:cdn:yarn-install'
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['-c', "
@@ -24,11 +32,14 @@ steps:
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_DOMAIN|(read x; echo FIREBAE_AUTH_DOMAIN=$x  ) >> .env &&
     gcloud secrets versions access latest --secret=VUE_APP_AUTH_API_KEY|(read x;    echo FIREBAE_AUTH_API_KEY=$x     ) >> .env
     " ]
+  id: 'slide4vr_ui:cdn:gen-env'
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: gsutil
   args: ['cp', 'gs://stg-slide4vr.nklab.dev/ssg-pages.json', 'ssg/ssg-pages.json'] 
+  id: 'slide4vr_ui:cdn:download-pages_json'
 - name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
   args: ['generate']
+  id: 'slide4vr_ui:cdn:build'
 - name: 'gcr.io/slide2vr/slide4vr_ui-builder'
-  waitFor: ['slide4vr_ui-builder']
+  id: 'slide4vr_ui:cdn:deploy'
