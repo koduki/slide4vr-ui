@@ -1,4 +1,6 @@
 tags: ['ui', 'slide4vr']
+options:
+ machineType: 'E2_HIGHCPU_2'
 images:
 - gcr.io/$PROJECT_ID/slide4vr_ui-builder
 steps:
@@ -19,7 +21,7 @@ steps:
   id: 'slide4vr_ui:ssg:push'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['run', 'deploy', 'slide4vr-ssg', '--image', 'gcr.io/$PROJECT_ID/slide4vr-ssg', '--region', 'us-central1', '--platform', 'managed', '--allow-unauthenticated']
-  id: 'slide4vr_ui:ssg:run'
+  id: 'slide4vr_ui:ssg:deploy'
 # Deploy to CDN
 - name: 'gcr.io/cloud-builders/npm'
   entrypoint: yarn
