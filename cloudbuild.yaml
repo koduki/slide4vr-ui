@@ -1,6 +1,6 @@
 tags: ['ui', 'slide4vr']
 options:
- machineType: 'E2_HIGHCPU_2'
+  machineType: 'E2_HIGHCPU_8'
 images:
 - gcr.io/$PROJECT_ID/slide4vr_ui-builder
 steps:
